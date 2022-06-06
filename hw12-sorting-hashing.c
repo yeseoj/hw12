@@ -121,7 +121,8 @@ int main()
 	return 1;
 }
 
-int initialize(int** a)
+/* 정렬/해싱에 이용될 값의 배열 동적 할당 및 초기화 */
+int initialize(int** a)	// 이중 포인터 사용
 {
 	int *temp = NULL;
 
@@ -139,6 +140,7 @@ int initialize(int** a)
 	return 0;
 }
 
+/* 동적 할당된 배열 할당 해제 */
 int freeArray(int *a)
 {
 	if(a != NULL)	// 동적 할당되었던 메모리 해제
@@ -146,6 +148,7 @@ int freeArray(int *a)
 	return 0;
 }
 
+/* 배열 값 출력 */
 void printArray(int *a)
 {
 	if (a == NULL) {
@@ -160,7 +163,7 @@ void printArray(int *a)
 	printf("\n");
 }
 
-
+/* 선택 정렬 */
 int selectionSort(int *a)
 {
 	int min;
@@ -196,6 +199,7 @@ int selectionSort(int *a)
 	return 0;
 }
 
+/* 삽입 정렬 */
 int insertionSort(int *a)
 {
 	int i, j, t;
@@ -204,8 +208,8 @@ int insertionSort(int *a)
 	printf("----------------------------------------------------------------\n");
 
 	printArray(a);
-	/** 앞쪽 값들 중 현재 위치 값보다 큰 값과 계속 자리교체한다.
-	 * (실제로는 현재 위치의 값은 앞쪽에 더이상 더 큰 값이 없을 때까지 반복하여 멈춘 위치에만 저장된다.)
+	/** 앞쪽 값들 중 현재 위치 값보다 큰 값은 그 다음 위치의 값과 계속 자리교체한다.
+	 * 현재 위치 기존 값은 앞쪽에 더이상 더 큰 값이 없을 때까지 반복하여 멈춘 위치에 저장된다.
 	 * 따라서 앞쪽에서부터 정렬되어 나간다. */
 	for(i = 1; i < MAX_ARRAY_SIZE; i++)
 	{
@@ -228,6 +232,7 @@ int insertionSort(int *a)
 	return 0;
 }
 
+/* 버블 정렬 */
 int bubbleSort(int *a)
 {
 	int i, j, t;
@@ -259,6 +264,7 @@ int bubbleSort(int *a)
 	return 0;
 }
 
+/* 셸 정렬 */
 int shellSort(int *a)
 {
 	int i, j, k, h, v;
@@ -300,6 +306,7 @@ int shellSort(int *a)
 	return 0;
 }
 
+/* 퀵 정렬 (recursive) */
 int quickSort(int *a, int n)
 {
 	int v, t;
@@ -342,6 +349,7 @@ int hashCode(int key) {
    return key % MAX_HASH_TABLE_SIZE;
 }
 
+/* 해시 테이블에 값 넣는 함수 */
 int hashing(int *a, int **ht)
 {
 	int *hashtable = NULL;
@@ -377,8 +385,8 @@ int hashing(int *a, int **ht)
 		if (hashtable[hashcode] == -1)
 		{
 			hashtable[hashcode] = key;
-		/* 비어 있지 않다면 선형 조사법으로 계속 다음 버킷 조사
-		 * 그중 비어 있는 곳에 할당 */
+		/** 비어 있지 않다면 버킷에 하나의 슬롯만 존재하므로 충돌 및 오버플로가 발생
+		 * 선형 조사법으로 계속 다음 버킷 조사, 그중 비어 있는 곳에 할당 */
 		} else 	{
 
 			index = hashcode;
@@ -397,6 +405,7 @@ int hashing(int *a, int **ht)
 	return 0;
 }
 
+/* 해시 테이블에서 값 찾는 함수 */
 int search(int *ht, int key)
 {
 	/* 해시 함수로 입력된 값의 위치 계산 */
@@ -406,7 +415,7 @@ int search(int *ht, int key)
 	if(ht[index] == key)
 		return index;
 
-	/* 그 위치에 없으면 비어 있지 않아서 계속 다음으로 옮겨갔단 이야기이므로 
+	/* 그 위치에 없으면 오버플로 발생으로 인해 계속 다음으로 옮겨갔단 이야기이므로 
 	 * 같은 원리로 계속 다음 버킷 조사하면서 값이 어디 있는지 조사하고 리턴 */
 	while(ht[++index] != key)
 	{
